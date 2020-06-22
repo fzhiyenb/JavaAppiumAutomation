@@ -18,7 +18,7 @@ public class MainClassTest {
 
     @Test
     public void testGetClassString() {
-        Assert.assertThat("The string doesn't contain required words", MainClass.getClassString(),
+        Assert.assertThat("The string \"" + MainClass.getClassString() + "\" doesn't contain words: hello or Hello", MainClass.getClassString(),
                 either(CoreMatchers.containsString("hello")).or(CoreMatchers.containsString("Hello")));
     }
 }
