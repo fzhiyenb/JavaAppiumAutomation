@@ -1,5 +1,6 @@
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
+import org.hamcrest.CoreMatchers;
 import org.junit.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -119,6 +120,32 @@ public class FirstTest {
         Assert.assertEquals("We see unexpected title", "Java (programming language)", article_title);
     }
 
+    @Test
+    public void testElementHasText() {
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Cannot find 'Search Wikipedia' input",
+                5);
+
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                "Java",
+                "Cannot find 'Object-oriented programming language' topic searching by Java",
+                5
+        );
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
+                "Cannot find the article to tap",
+                5
+        );
+
+        assertElementHasText(
+                By.id("org.wikipedia:id/view_page_subtitle_text"),
+                "programming",
+                "Element doesn't contain expected text"
+        );
+    }
+
     private WebElement waitForElementPresent(By by, String error_message, long timeOutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeOutInSeconds);
         wait.withMessage(error_message + "\n");
@@ -150,6 +177,17 @@ public class FirstTest {
     private WebElement waitForElementAndClear(By by, String error_message, long timeOutInSeconds) {
         WebElement element = waitForElementPresent(by, error_message, timeOutInSeconds);
         element.clear();
+        return element;
+    }
+
+    private WebElement assertElementHasText(By by, String expected_result, String error_message) {
+        WebElement element = waitForElementPresent(
+                by,
+                error_message,
+                15
+        );
+        String containedText = element.getAttribute("text");
+        Assert.assertThat(containedText, CoreMatchers.containsString(expected_result));
         return element;
     }
 }
