@@ -121,7 +121,7 @@ public class FirstTest {
     }
 
     @Test
-    public void testElementHasText() {
+    public void testArticleSubtitleHasText() {
         waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Cannot find 'Search Wikipedia' input",
@@ -142,8 +142,16 @@ public class FirstTest {
         assertElementHasText(
                 By.id("org.wikipedia:id/view_page_subtitle_text"),
                 "programming",
-                "Element doesn't contain expected text"
+                "Cannot find the subtitle of the article"
         );
+    }
+
+    @Test
+    public void testSearchBarHasText() {
+        assertElementHasText(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Search Wikipedia",
+                "Cannot find Search Bar");
     }
 
     private WebElement waitForElementPresent(By by, String error_message, long timeOutInSeconds) {
@@ -183,7 +191,7 @@ public class FirstTest {
     private WebElement assertElementHasText(By by, String expected_result, String error_message) {
         WebElement element = waitForElementPresent(
                 by,
-                error_message,
+                error_message + expected_result,
                 15
         );
         String containedText = element.getAttribute("text");
