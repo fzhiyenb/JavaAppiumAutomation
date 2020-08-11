@@ -625,6 +625,31 @@ public class FirstTest {
         );
     }
 
+    @Test
+    public void testArticleTitlePresent() {
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Cannot find 'Search Wikipedia' input",
+                5);
+
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                "Java",
+                "Cannot find 'Object-oriented programming language' topic searching by Java",
+                5
+        );
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
+                "Cannot find the article to tap",
+                5
+        );
+
+        assertElementPresent(
+                By.id("org.wikipedia:id/view_page_title_text"),
+                "Cannot find article title"
+        );
+    }
+
     private WebElement waitForElementPresent(By by, String error_message, long timeOutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeOutInSeconds);
         wait.withMessage(error_message + "\n");
@@ -723,6 +748,16 @@ public class FirstTest {
         return elements.size();
     }
 
+    private void assertElementPresent(By by, String error_message) {
+        WebElement title_element = waitForElementPresent(
+                by,
+                "Cannot find title"
+        );
+
+        String article_title = title_element.getAttribute("text");
+        Assert.assertTrue(error_message, article_title.isEmpty() == false);
+    }
+
     private void assertElementNotPresent(By by, String error_message) {
         int amount_of_elements = getAmountOfElements(by);
         if (amount_of_elements > 0) {
@@ -735,6 +770,5 @@ public class FirstTest {
         WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
         return element.getAttribute(attribute);
     }
-
 }
 
