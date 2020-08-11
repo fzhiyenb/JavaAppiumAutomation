@@ -433,6 +433,10 @@ public class FirstTest {
                 title_before_rotation,
                 title_after_second_rotation
         );
+
+        if (driver.getOrientation() == ScreenOrientation.LANDSCAPE) {
+            driver.rotate(ScreenOrientation.PORTRAIT);
+        }
     }
 
     @Test
